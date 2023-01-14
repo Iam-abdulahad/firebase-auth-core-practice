@@ -1,7 +1,7 @@
 import app from "./firebase.init";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, FormLabel } from 'react-bootstrap';
-import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { FacebookAuthProvider, getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 
 
@@ -13,6 +13,7 @@ function App() {
   const [user, setUser] = useState({});
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
 
 
   const handleGoogleSignIn = () => {
@@ -40,7 +41,17 @@ function App() {
     })
   }
 
-
+const handleFacebookSignIn = () =>{
+  signInWithPopup(auth, facebookProvider)
+  .then(result =>{
+    const user = result.user;
+    setUser(user);
+    console.log(user);
+  })
+  .catch(error =>{
+    console.error(error);
+  })
+}
   return (
     <div className="App">
       <div className='container'>
@@ -65,7 +76,7 @@ function App() {
               <form>
                 <div className="text-center mb-3">
                   <p>Sign in with:</p>
-                  <Button type="button" className="btn btn-link btn-floating mx-1">
+                  <Button onClick={handleFacebookSignIn} type="button" className="btn btn-link btn-floating mx-1">
                     Facebook
                   </Button>
 
