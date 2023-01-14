@@ -1,7 +1,7 @@
 import app from "./firebase.init";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, FormLabel } from 'react-bootstrap';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 
 
@@ -10,8 +10,9 @@ import { useState } from "react";
 const auth = getAuth(app);
 
 function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
   const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
 
 
   const handleGoogleSignIn = () => {
@@ -27,13 +28,23 @@ function App() {
       })
   }
 
-
+  const handleGithubSignIn = () =>{
+    signInWithPopup(auth, githubProvider) 
+    .then(result => {
+      const user = result.user;
+      setUser(user);
+      console.log(user);
+    })
+    .catch(error =>{
+      console.error(error);
+    })
+  }
 
 
   return (
     <div className="App">
       <div className='container'>
-        <h1>Welcome to Authentication projrct</h1>
+        <h1>Welcome to Authentication project</h1>
         <div>
           {/* <!-- Pills navs --> */}
           <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
@@ -62,7 +73,7 @@ function App() {
                     Google
                   </button>
 
-                  <button type="button" className="btn btn-link btn-floating mx-1">
+                  <button onClick={handleGithubSignIn} type="button" className="btn btn-link btn-floating mx-1">
                     GitHub
                   </button>
                 </div>
