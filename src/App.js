@@ -1,8 +1,35 @@
-
+import app from "./firebase.init";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, FormLabel } from 'react-bootstrap';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useState } from "react";
+
+
+
+
+const auth = getAuth(app);
 
 function App() {
+  const [user, setUser] = useState();
+  const googleProvider = new GoogleAuthProvider();
+
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, googleProvider)
+      .then(result => {
+        const user = result.user;
+        setUser(user);
+        console.log(user);
+      })
+
+      .catch(error => {
+        console.error(error);
+      })
+  }
+
+
+
+
   return (
     <div className="App">
       <div className='container'>
@@ -31,7 +58,7 @@ function App() {
                     Facebook
                   </Button>
 
-                  <button type="button" className="btn btn-link btn-floating mx-1">
+                  <button onClick={handleGoogleSignIn} type="button" className="btn btn-link btn-floating mx-1">
                     Google
                   </button>
 
